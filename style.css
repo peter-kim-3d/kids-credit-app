@@ -1,0 +1,263 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: white;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.balance-display {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.balance-label {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.balance-value {
+    font-size: 3em;
+    font-weight: bold;
+    color: #667eea;
+    margin: 10px 0;
+}
+
+.balance-sublabel {
+    font-size: 0.9em;
+    color: #999;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+section {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.activity-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.activity-card {
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.activity-card:hover {
+    transform: translateY(-5px);
+}
+
+.activity-card.earn {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.activity-card.spend {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.activity-card h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.timer-display {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333;
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+}
+
+.timer-display.active {
+    color: #e74c3c;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+}
+
+.btn-start {
+    background: #2ecc71;
+    color: white;
+}
+
+.btn-start:hover {
+    background: #27ae60;
+    transform: scale(1.05);
+}
+
+.btn-stop {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-stop:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
+.btn-clear {
+    background: #95a5a6;
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.9em;
+}
+
+.btn-clear:hover {
+    background: #7f8c8d;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.history-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background: #f8f9fa;
+}
+
+.history-item.earn {
+    border-left: 4px solid #2ecc71;
+}
+
+.history-item.spend {
+    border-left: 4px solid #e74c3c;
+}
+
+.history-info {
+    flex: 1;
+}
+
+.history-activity {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.history-time {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.history-duration {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.history-duration.earn {
+    color: #2ecc71;
+}
+
+.history-duration.spend {
+    color: #e74c3c;
+}
+
+.no-history {
+    text-align: center;
+    color: #999;
+    padding: 40px;
+    font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .balance-value {
+        font-size: 2em;
+    }
+
+    .activity-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .history-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
