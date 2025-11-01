@@ -47,8 +47,8 @@ A **beautiful, modern** time credit tracking app built with **Streamlit** and en
 ### Requirements
 - Python 3.7+
 - Streamlit
-- streamlit-shadcn-ui (modern UI components)
-- streamlit-lottie (optional, for future animations)
+
+That's it! No external UI libraries needed - all styling is done with custom CSS.
 
 ### Install
 
@@ -60,8 +60,8 @@ cd kids-credit-app
 # Install dependencies
 pip install -r requirements.txt
 
-# Alternative: Install individually
-pip install streamlit streamlit-shadcn-ui streamlit-lottie
+# Or just install Streamlit
+pip install streamlit
 ```
 
 ### Run
@@ -155,10 +155,10 @@ Opens at: `http://localhost:8501`
 
 ### Tech Stack
 - **Streamlit 1.28+** - Web framework
-- **streamlit-shadcn-ui** - Modern UI components
-- **Custom CSS** - Advanced animations & styling
+- **Custom CSS** - Advanced animations & styling (360+ lines!)
 - **JSON** - Data persistence
 - **Python datetime** - Time calculations
+- **Pure CSS animations** - No external libraries needed
 
 ### File Structure
 ```
@@ -385,11 +385,6 @@ All animations are GPU-accelerated for smooth performance!
 - Enable hardware acceleration in browser settings
 - Try Chrome or Edge for best performance
 
-**streamlit-shadcn-ui not found?**
-```bash
-pip install --upgrade streamlit-shadcn-ui
-```
-
 **Gradients not showing?**
 - Some older browsers don't support `-webkit-background-clip`
 - Update to latest browser version
@@ -431,8 +426,8 @@ Free for personal use.
 ## 🙏 Credits
 
 - **Streamlit** - Amazing Python web framework
-- **streamlit-shadcn-ui** - Modern UI components
 - **Google Fonts** - Fredoka & Baloo 2 fonts
+- **CSS3 Animations** - Smooth, modern effects
 - **CSS Gradients** - Beautiful color transitions
 - **Emoji** - Making everything more fun!
 

@@ -3,14 +3,13 @@
 A beautiful, modern time credit tracking app for kids
 
 Installation:
-pip install streamlit streamlit-shadcn-ui streamlit-lottie
+pip install streamlit
 
 Run:
 streamlit run app.py
 """
 
 import streamlit as st
-from streamlit_shadcn_ui import badges, card, metric, switch
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
