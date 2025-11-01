@@ -1,48 +1,38 @@
 # Kids Credit Tracker
 
-A Python/Streamlit web app to help kids track time credits earned through activities like studying, practicing, and cleaning, and spend them on entertainment like TV and games.
+A simple Python/Streamlit web app to help kids track time credits. Kids earn credits by doing productive activities and spend them on entertainment.
 
 ## Features
 
-- **Earn Credits**: Track time spent on productive activities
-  - 📚 Study
-  - 🎵 Practice
-  - 🧹 Cleaning
-
-- **Spend Credits**: Use earned credits for fun activities
-  - 📺 TV/Tablet
-  - 🎮 Games
-
-- **Automatic Tracking**: Built-in timers for each activity
-- **Balance Display**: See your current credit balance at a glance
-- **Activity History**: View all past activities with timestamps
-- **Auto-Save**: All data is saved automatically to a JSON file
-- **Auto-Refresh**: Timers update in real-time
+- **💪 Earn Credits**: Start a timer when doing productive activities (study, practice, chores, etc.)
+- **🎮 Spend Credits**: Use earned credits for fun activities (TV, tablet, games, etc.)
+- **⏱️ Automatic Tracking**: Built-in timers that update in real-time
+- **💾 Auto-Save**: All data saves automatically to a JSON file
+- **📋 Activity History**: View all past earning and spending with timestamps
+- **Simple Interface**: Just two options - Earn or Spend!
 
 ## How to Use
 
 ### Earning Credits
 
-1. Choose an activity (Study, Practice, or Cleaning)
-2. Click the **▶️ Start** button to begin the timer
-3. Do your activity!
-4. Click the **⏹️ Stop** button when done
-5. Your credits will be added to your balance automatically
+1. Click **▶️ Start Earning** when your child starts a productive activity
+2. Let them do their activity (studying, practicing, cleaning, etc.)
+3. Click **⏹️ Stop Earning** when done
+4. Credits are automatically added to their balance!
 
 ### Spending Credits
 
-1. Choose an activity (TV/Tablet or Game)
-2. Click the **▶️ Start** button
-3. Enjoy your earned screen time!
-4. Click the **⏹️ Stop** button when done
-5. Your credits will be deducted from your balance
+1. Click **▶️ Start Spending** when they want screen time or fun activities
+2. Let them enjoy their earned time (TV, tablet, games, etc.)
+3. Click **⏹️ Stop Spending** when done
+4. Credits are automatically deducted from their balance!
 
 ### Important Notes
 
-- You need to have credits in your balance before you can spend them
-- All data is saved automatically to `credit_data.json`
-- Active timers update every second automatically
-- Click "🗑️ Clear History" to remove all past activities (balance remains unchanged)
+- Kids must have credits in their balance before they can spend
+- Timers update automatically every second
+- All data is saved automatically
+- Can't start spending if balance is zero
 
 ## Running Locally
 
@@ -83,7 +73,7 @@ Deploy this app for free so kids can access it from anywhere on the internet!
 3. **Deploy the App**
    - Click "New app"
    - Select your repository: `peter-kim-3d/kids-credit-app`
-   - Branch: `claude/kids-credit-system-011CUeQ6e6aoCoCJQBKKfUsg` (or your main branch)
+   - Branch: Your main branch
    - Main file path: `app.py`
    - Click "Deploy"!
 
@@ -102,7 +92,7 @@ Deploy this app for free so kids can access it from anywhere on the internet!
 
 ### Files
 
-- `app.py` - Main Streamlit application
+- `app.py` - Main Streamlit application (300+ lines)
 - `requirements.txt` - Python dependencies
 - `credit_data.json` - Auto-generated data storage (not in git)
 - `.gitignore` - Excludes data file from version control
@@ -121,28 +111,24 @@ Deploy this app for free so kids can access it from anywhere on the internet!
 
 ## Tips for Parents
 
-1. **Set Goals**: Help your kids understand how much time they need to earn for their desired activities
+1. **Keep it Simple**: Just two buttons - Earn and Spend
 2. **Fair Exchange**: The app uses a 1:1 ratio (1 second earned = 1 second spent)
-3. **Regular Review**: Check the activity history together to discuss time management
-4. **Multi-Device**: Once deployed to Streamlit Cloud, accessible from any device
+3. **Set Expectations**: Explain what activities count as "earning" vs "spending"
+4. **Review Together**: Check the activity history to discuss time management
+5. **Multi-Device**: Once deployed to Streamlit Cloud, accessible from any device
 
-## Customization
+## Benefits Over Manual System
 
-To add new activities, edit the `ACTIVITIES` dictionary in `app.py`:
+Your old manual system required:
+- Turning timer on/off
+- Writing down times on paper
+- Calculating balance manually
 
-```python
-ACTIVITIES = {
-    'study': {'type': 'earn', 'label': 'Study', 'emoji': '📚'},
-    'homework': {'type': 'earn', 'label': 'Homework', 'emoji': '✏️'},  # Add new activity
-    # Add more activities here
-}
-```
-
-## Privacy
-
-- Data is stored locally in `credit_data.json`
-- When deployed, each deployment has its own data storage
-- No personal information is collected or transmitted
+This app automatically:
+- Tracks all timers
+- Calculates balance instantly
+- Saves history permanently
+- Shows everything in one view
 
 ## Troubleshooting
 
@@ -151,12 +137,23 @@ ACTIVITIES = {
 - If it seems stuck, refresh the page
 
 **Lost data?**
-- Check if `credit_data.json` exists
+- Check if `credit_data.json` exists in the app directory
 - Data is saved after every Start/Stop action
 
 **Can't start spending timer?**
-- Make sure you have credits in your balance
-- Earn credits first by doing productive activities
+- Make sure there are credits in the balance
+- Earn credits first by using the Earn timer
+
+**App won't start?**
+- Make sure Streamlit is installed: `pip install streamlit`
+- Check Python version: `python --version` (needs 3.7+)
+
+## Privacy
+
+- Data is stored locally in `credit_data.json`
+- When deployed, each deployment has its own data storage
+- No personal information is collected or transmitted
+- Completely private and secure
 
 ## License
 
