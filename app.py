@@ -1,4 +1,16 @@
+"""
+🌟 Kids Credit Tracker - Fancy Edition 🌟
+A beautiful, modern time credit tracking app for kids
+
+Installation:
+pip install streamlit streamlit-shadcn-ui streamlit-lottie
+
+Run:
+streamlit run app.py
+"""
+
 import streamlit as st
+from streamlit_shadcn_ui import badges, card, metric, switch
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -15,115 +27,227 @@ st.set_page_config(
 )
 
 # ============================================================================
-# CUSTOM CSS - Simple and Fun Design
+# CUSTOM CSS - Modern, Clean Design with Animations
 # ============================================================================
 st.markdown("""
 <style>
-    /* Import fun font */
-    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
+    /* Import fun fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Baloo+2:wght@400;600;700&display=swap');
 
-    /* Cheerful background */
+    /* Main app styling */
     .stApp {
-        background: linear-gradient(180deg, #FFF9C4 0%, #FFE082 100%);
-        font-family: 'Fredoka', sans-serif;
+        background: linear-gradient(135deg, #FFF8E1 0%, #FFE0B2 50%, #FFF3E0 100%);
+        font-family: 'Fredoka', 'Baloo 2', sans-serif;
     }
 
     /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    header {visibility: hidden;}
 
-    /* Main title */
-    .main-title {
-        text-align: center;
-        font-size: 3em;
-        font-weight: 700;
-        color: #FF6B6B;
-        text-shadow: 3px 3px 0px #FFE66D;
-        margin: 20px 0;
+    /* Remove default padding */
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
     }
 
-    /* Balance display */
-    .balance-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 25px;
-        padding: 30px;
+    /* Main title with gradient and animation */
+    .app-title {
         text-align: center;
-        margin: 20px 0;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        font-size: 3.5em;
+        font-weight: 700;
+        background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 50%, #4ECDC4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1.5rem;
+        animation: title-glow 3s ease-in-out infinite;
+    }
+
+    @keyframes title-glow {
+        0%, 100% { filter: brightness(1); transform: scale(1); }
+        50% { filter: brightness(1.2); transform: scale(1.02); }
+    }
+
+    /* Balance card - floating effect */
+    .balance-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 30px;
+        padding: 2.5rem;
+        text-align: center;
+        margin: 1.5rem 0;
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+        transform: translateY(0);
+        transition: all 0.3s ease;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .balance-container:hover {
+        box-shadow: 0 25px 80px rgba(102, 126, 234, 0.5);
+        transform: translateY(-5px);
     }
 
     .balance-emoji {
-        font-size: 2.5em;
-        animation: spin 4s linear infinite;
+        font-size: 3.5em;
+        display: inline-block;
+        animation: rotate 4s linear infinite;
     }
 
-    @keyframes spin {
+    @keyframes rotate {
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
     }
 
     .balance-label {
-        color: white;
-        font-size: 1.3em;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.5em;
         font-weight: 600;
-        margin-top: 10px;
+        margin-top: 0.5rem;
+        letter-spacing: 0.5px;
     }
 
     .balance-value {
         color: #FFE66D;
-        font-size: 4em;
+        font-size: 5em;
         font-weight: 700;
-        margin: 15px 0;
+        margin: 0.5rem 0;
         font-family: 'Courier New', monospace;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
     }
 
-    /* Mode buttons */
-    .mode-buttons {
+    /* Mode buttons container */
+    .mode-toggle {
         display: flex;
-        gap: 20px;
+        gap: 1rem;
         justify-content: center;
-        margin: 30px 0;
+        margin: 2rem 0;
     }
 
-    /* Timer display */
-    .timer-card {
-        background: white;
+    /* Custom button styling */
+    div[data-testid="stButton"] button {
+        font-family: 'Fredoka', sans-serif;
+        font-size: 1.3em;
+        font-weight: 700;
+        padding: 1rem 2.5rem;
         border-radius: 25px;
-        padding: 40px;
+        border: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    div[data-testid="stButton"] button:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    div[data-testid="stButton"] button:active {
+        transform: translateY(0) scale(0.98);
+    }
+
+    /* Timer section with mode-specific gradients */
+    .timer-section {
+        background: white;
+        border-radius: 35px;
+        padding: 3rem 2rem;
+        margin: 2rem 0;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s ease;
+    }
+
+    .timer-section.earn-mode {
+        border: 3px solid transparent;
+        background: linear-gradient(white, white) padding-box,
+                    linear-gradient(135deg, #84FAB0 0%, #8FD3F4 100%) border-box;
+    }
+
+    .timer-section.spend-mode {
+        border: 3px solid transparent;
+        background: linear-gradient(white, white) padding-box,
+                    linear-gradient(135deg, #FA709A 0%, #FEE140 100%) border-box;
+    }
+
+    /* Mode header */
+    .mode-header {
         text-align: center;
-        margin: 30px 0;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        margin-bottom: 2rem;
+    }
+
+    .mode-emoji {
+        font-size: 4em;
+        display: inline-block;
+        animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
     }
 
     .mode-title {
-        font-size: 2.5em;
+        font-size: 2.8em;
         font-weight: 700;
-        margin-bottom: 10px;
+        margin: 0.5rem 0;
+    }
+
+    .mode-title.earn {
+        background: linear-gradient(135deg, #52B788 0%, #40916C 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .mode-title.spend {
+        background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
 
     .mode-subtitle {
-        font-size: 1.2em;
+        font-size: 1.3em;
         color: #666;
-        margin-bottom: 20px;
+        font-weight: 500;
     }
 
+    /* Timer display - modern glassmorphism */
     .timer-display {
-        font-size: 5em;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 25px;
+        padding: 2rem;
+        margin: 2rem 0;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .timer-value {
+        font-size: 5.5em;
         font-weight: 700;
-        padding: 30px;
-        margin: 25px 0;
-        border-radius: 20px;
-        background: #F8F9FA;
-        color: #333;
         font-family: 'Courier New', monospace;
+        color: #333;
+        letter-spacing: 0.05em;
     }
 
     .timer-active {
-        background: linear-gradient(45deg, #FF6B6B, #FFE66D, #4ECDC4, #95E1D3);
-        background-size: 400% 400%;
-        animation: gradient-shift 3s ease infinite, pulse 1.5s ease-in-out infinite;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        animation: timer-pulse 2s ease-in-out infinite, gradient-shift 4s ease infinite;
+        color: white !important;
+    }
+
+    .timer-active .timer-value {
         color: white;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes timer-pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.03); }
     }
 
     @keyframes gradient-shift {
@@ -132,39 +256,18 @@ st.markdown("""
         100% { background-position: 0% 50%; }
     }
 
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-
-    /* Buttons */
-    div[data-testid="stButton"] button {
-        font-family: 'Fredoka', sans-serif;
-        font-size: 1.4em;
-        font-weight: 700;
-        padding: 18px 35px;
-        border-radius: 20px;
-        border: none;
-        transition: all 0.3s ease;
-        width: 100%;
-    }
-
-    div[data-testid="stButton"] button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
-
-    /* Success message */
-    .success-msg {
+    /* Success celebration */
+    .celebration {
         background: linear-gradient(135deg, #52B788 0%, #95E1D3 100%);
         color: white;
-        padding: 20px;
-        border-radius: 15px;
-        font-size: 1.4em;
-        font-weight: 600;
+        padding: 1.5rem;
+        border-radius: 20px;
         text-align: center;
-        margin: 20px 0;
-        animation: slide-in 0.5s ease;
+        font-size: 1.6em;
+        font-weight: 700;
+        margin: 1.5rem 0;
+        box-shadow: 0 10px 30px rgba(82, 183, 136, 0.3);
+        animation: slide-in 0.5s ease, shake 0.5s ease 0.5s;
     }
 
     @keyframes slide-in {
@@ -178,43 +281,112 @@ st.markdown("""
         }
     }
 
-    /* History section */
-    .history-section {
+    @keyframes shake {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(-3deg); }
+        75% { transform: rotate(3deg); }
+    }
+
+    /* Activity history - clean cards */
+    .history-container {
         background: white;
-        border-radius: 20px;
-        padding: 25px;
-        margin: 30px 0;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-radius: 25px;
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
     }
 
     .history-title {
-        font-size: 1.8em;
+        font-size: 2em;
         font-weight: 700;
         color: #5E548E;
-        margin-bottom: 15px;
+        margin-bottom: 1.5rem;
+        text-align: center;
     }
 
-    .history-item {
-        background: #F8F9FA;
-        border-radius: 12px;
-        padding: 15px;
-        margin: 8px 0;
-        font-size: 1.05em;
+    .activity-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border-radius: 18px;
+        padding: 1.3rem;
+        margin: 0.8rem 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
     }
 
-    .history-earn {
-        border-left: 6px solid #52B788;
+    .activity-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     }
 
-    .history-spend {
-        border-left: 6px solid #FF6B6B;
+    .activity-card.earn {
+        border-left: 5px solid #52B788;
     }
 
+    .activity-card.spend {
+        border-left: 5px solid #FF6B6B;
+    }
+
+    .activity-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .activity-info {
+        flex: 1;
+    }
+
+    .activity-label {
+        font-size: 1.3em;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+    }
+
+    .activity-time {
+        font-size: 0.95em;
+        color: #999;
+    }
+
+    .activity-duration {
+        font-size: 1.8em;
+        font-weight: 700;
+    }
+
+    /* Empty state */
     .empty-state {
         text-align: center;
-        padding: 30px;
-        color: #999;
+        padding: 3rem 1rem;
+        color: #aaa;
+    }
+
+    .empty-emoji {
+        font-size: 4em;
+        opacity: 0.5;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    /* Warning message */
+    .warning-box {
+        background: linear-gradient(135deg, #FFF3CD 0%, #FFE5B4 100%);
+        border-left: 5px solid #FFC107;
+        border-radius: 15px;
+        padding: 1.2rem;
+        margin: 1rem 0;
         font-size: 1.2em;
+        font-weight: 600;
+        color: #856404;
+        text-align: center;
+    }
+
+    /* Smooth transitions for mode changes */
+    .fade-in {
+        animation: fadeIn 0.4s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -269,7 +441,7 @@ def init_session_state():
     if 'history' not in st.session_state:
         st.session_state.history = []
     if 'current_mode' not in st.session_state:
-        st.session_state.current_mode = 'earn'  # Default mode
+        st.session_state.current_mode = 'earn'
     if 'earn_timer' not in st.session_state:
         st.session_state.earn_timer = None
     if 'spend_timer' not in st.session_state:
@@ -290,9 +462,9 @@ def format_time(seconds):
     secs = seconds % 60
 
     if hours > 0:
-        return f"{hours}:{minutes:02d}:{secs:02d}"
+        return f"{hours:02d}:{minutes:02d}:{secs:02d}"
     else:
-        return f"{minutes}:{secs:02d}"
+        return f"{minutes:02d}:{secs:02d}"
 
 def get_elapsed_time(mode):
     """Calculate elapsed time for active timer"""
@@ -309,11 +481,11 @@ def get_balance_emoji():
     balance = st.session_state.balance
     if balance == 0:
         return "😴"
-    elif balance < 300:  # < 5 min
+    elif balance < 300:
         return "😊"
-    elif balance < 900:  # < 15 min
+    elif balance < 900:
         return "😄"
-    elif balance < 1800:  # < 30 min
+    elif balance < 1800:
         return "🤩"
     else:
         return "🎉"
@@ -325,6 +497,7 @@ def switch_mode(mode):
     """Switch between earn and spend modes"""
     st.session_state.current_mode = mode
     save_data()
+    st.rerun()
 
 # ============================================================================
 # TIMER CONTROLS
@@ -345,7 +518,7 @@ def start_timer():
             st.warning("⏰ Spending timer is already running!")
             return
         if st.session_state.balance <= 0:
-            st.error("🚫 No credits! Earn some first!")
+            st.error("🚫 No credits! Switch to Earn Mode first!")
             return
         st.session_state.spend_timer = datetime.now()
 
@@ -425,30 +598,27 @@ def main():
     init_session_state()
 
     # ========================================================================
-    # HEADER
+    # HEADER - Animated title
     # ========================================================================
-    st.markdown('<h1 class="main-title">🌟 Kids Credit Tracker 🌟</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="app-title">🌟 Kids Credit Tracker 🌟</h1>', unsafe_allow_html=True)
 
     # ========================================================================
     # CELEBRATION MESSAGE
     # ========================================================================
     if st.session_state.show_celebration:
-        st.markdown("""
-        <div class="success-msg">
-            🎉 Awesome! You Earned Time Credits! 🎉
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="celebration">🎉 Awesome! You Earned Time Credits! 🎉</div>',
+                   unsafe_allow_html=True)
         st.balloons()
         st.session_state.show_celebration = False
 
     # ========================================================================
-    # BALANCE DISPLAY - Always visible at top
+    # BALANCE DISPLAY - Floating card with animation
     # ========================================================================
     balance_display = format_time(st.session_state.balance)
     balance_emoji = get_balance_emoji()
 
     st.markdown(f"""
-    <div class="balance-card">
+    <div class="balance-container">
         <div class="balance-emoji">{balance_emoji}</div>
         <div class="balance-label">Your Time Credits</div>
         <div class="balance-value">{balance_display}</div>
@@ -456,12 +626,13 @@ def main():
     """, unsafe_allow_html=True)
 
     # ========================================================================
-    # MODE TOGGLE BUTTONS - Switch between Earn and Spend
+    # MODE TOGGLE BUTTONS - Using shadcn-style buttons
     # ========================================================================
+    st.markdown('<div class="mode-toggle">', unsafe_allow_html=True)
+
     col1, col2 = st.columns(2)
 
     with col1:
-        # Earn mode button
         if st.button(
             "💪 Earn Mode",
             key="earn_mode_btn",
@@ -469,10 +640,8 @@ def main():
             use_container_width=True
         ):
             switch_mode('earn')
-            st.rerun()
 
     with col2:
-        # Spend mode button
         if st.button(
             "🎮 Spend Mode",
             key="spend_mode_btn",
@@ -480,27 +649,37 @@ def main():
             use_container_width=True
         ):
             switch_mode('spend')
-            st.rerun()
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # ========================================================================
-    # TIMER DISPLAY - Changes based on current mode
+    # TIMER SECTION - Mode-specific display with fade-in animation
     # ========================================================================
-    st.markdown('<div class="timer-card">', unsafe_allow_html=True)
-
-    # Get current mode details
     mode = st.session_state.current_mode
+    mode_class = "earn-mode" if mode == 'earn' else "spend-mode"
+
+    st.markdown(f'<div class="timer-section {mode_class} fade-in">', unsafe_allow_html=True)
 
     if mode == 'earn':
         # EARN MODE
-        st.markdown('<div class="mode-title" style="color: #52B788;">💪 Earn Time Credits</div>', unsafe_allow_html=True)
-        st.markdown('<div class="mode-subtitle">Study • Practice • Clean • Help • Read</div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="mode-header">
+            <div class="mode-emoji">💪</div>
+            <div class="mode-title earn">Earn Time Credits</div>
+            <div class="mode-subtitle">Study • Practice • Clean • Help • Read</div>
+        </div>
+        """, unsafe_allow_html=True)
 
         # Timer display
         is_active = st.session_state.earn_timer is not None
         elapsed = get_elapsed_time('earn') if is_active else 0
         timer_class = "timer-display timer-active" if is_active else "timer-display"
 
-        st.markdown(f'<div class="{timer_class}">{format_time(elapsed)}</div>', unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="{timer_class}">
+            <div class="timer-value">{format_time(elapsed)}</div>
+        </div>
+        """, unsafe_allow_html=True)
 
         # Control buttons
         col1, col2 = st.columns(2)
@@ -513,19 +692,32 @@ def main():
 
     else:
         # SPEND MODE
-        st.markdown('<div class="mode-title" style="color: #FF6B6B;">🎮 Spend Time Credits</div>', unsafe_allow_html=True)
-        st.markdown('<div class="mode-subtitle">TV • Games • Tablet • Fun Time</div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="mode-header">
+            <div class="mode-emoji">🎮</div>
+            <div class="mode-title spend">Spend Time Credits</div>
+            <div class="mode-subtitle">TV • Games • Tablet • Fun Time</div>
+        </div>
+        """, unsafe_allow_html=True)
 
         # Timer display
         is_active = st.session_state.spend_timer is not None
         elapsed = get_elapsed_time('spend') if is_active else 0
         timer_class = "timer-display timer-active" if is_active else "timer-display"
 
-        st.markdown(f'<div class="{timer_class}">{format_time(elapsed)}</div>', unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="{timer_class}">
+            <div class="timer-value">{format_time(elapsed)}</div>
+        </div>
+        """, unsafe_allow_html=True)
 
         # Warning if no credits
         if st.session_state.balance <= 0 and not is_active:
-            st.warning("⚠️ No credits available! Switch to Earn Mode first!")
+            st.markdown("""
+            <div class="warning-box">
+                ⚠️ No credits available! Switch to Earn Mode to get some!
+            </div>
+            """, unsafe_allow_html=True)
 
         # Control buttons
         col1, col2 = st.columns(2)
@@ -541,15 +733,15 @@ def main():
     st.markdown('</div>', unsafe_allow_html=True)
 
     # ========================================================================
-    # ACTIVITY HISTORY
+    # ACTIVITY HISTORY - Clean card design
     # ========================================================================
-    st.markdown('<div class="history-section">', unsafe_allow_html=True)
+    st.markdown('<div class="history-container fade-in">', unsafe_allow_html=True)
 
-    col1, col2 = st.columns([3, 1])
+    col1, col2 = st.columns([4, 1])
     with col1:
         st.markdown('<div class="history-title">📋 Activity History</div>', unsafe_allow_html=True)
     with col2:
-        if st.button("🗑️ Clear", type="secondary", use_container_width=True):
+        if st.button("🗑️", key="clear_btn", help="Clear history", use_container_width=True):
             if st.session_state.history:
                 clear_history()
 
@@ -557,14 +749,14 @@ def main():
     if not st.session_state.history:
         st.markdown("""
         <div class="empty-state">
-            <div style="font-size: 2.5em;">📝</div>
+            <span class="empty-emoji">📝</span>
             <div>No activities yet!</div>
             <div style="font-size: 0.9em;">Start earning to see your history.</div>
         </div>
         """, unsafe_allow_html=True)
     else:
-        # Show last 15 activities
-        for item in st.session_state.history[:15]:
+        # Show last 12 activities
+        for item in st.session_state.history[:12]:
             activity_type = item['type']
 
             if activity_type == 'earn':
@@ -572,29 +764,29 @@ def main():
                 label = 'Earned'
                 sign = '+'
                 color = '#52B788'
-                css_class = 'history-earn'
+                css_class = 'earn'
             else:
                 emoji = '🎮'
                 label = 'Spent'
                 sign = '-'
                 color = '#FF6B6B'
-                css_class = 'history-spend'
+                css_class = 'spend'
 
             timestamp = datetime.fromisoformat(item['timestamp'])
             time_str = format_time(item['duration'])
 
             st.markdown(f"""
-            <div class="history-item {css_class}">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div style="flex: 1;">
-                        <div style="font-weight: 700; font-size: 1.15em; color: {color};">
+            <div class="activity-card {css_class}">
+                <div class="activity-content">
+                    <div class="activity-info">
+                        <div class="activity-label" style="color: {color};">
                             {emoji} {label}
                         </div>
-                        <div style="color: #999; font-size: 0.85em; margin-top: 3px;">
+                        <div class="activity-time">
                             {timestamp.strftime('%b %d at %I:%M %p')}
                         </div>
                     </div>
-                    <div style="font-size: 1.5em; font-weight: 700; color: {color};">
+                    <div class="activity-duration" style="color: {color};">
                         {sign}{time_str}
                     </div>
                 </div>
