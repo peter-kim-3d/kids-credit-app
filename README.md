@@ -1,6 +1,6 @@
 # Kids Credit Tracker
 
-A simple and fun web app to help kids track time credits earned through activities like studying, practicing, and cleaning, and spend them on entertainment like TV and games.
+A Python/Streamlit web app to help kids track time credits earned through activities like studying, practicing, and cleaning, and spend them on entertainment like TV and games.
 
 ## Features
 
@@ -16,82 +16,147 @@ A simple and fun web app to help kids track time credits earned through activiti
 - **Automatic Tracking**: Built-in timers for each activity
 - **Balance Display**: See your current credit balance at a glance
 - **Activity History**: View all past activities with timestamps
-- **Auto-Save**: All data is saved automatically to your browser
+- **Auto-Save**: All data is saved automatically to a JSON file
+- **Auto-Refresh**: Timers update in real-time
 
 ## How to Use
-
-### Getting Started
-
-1. Open `index.html` in your web browser
-2. You'll see your credit balance at the top (starts at 0:00)
 
 ### Earning Credits
 
 1. Choose an activity (Study, Practice, or Cleaning)
-2. Click the **Start** button to begin the timer
+2. Click the **▶️ Start** button to begin the timer
 3. Do your activity!
-4. Click the **Stop** button when done
+4. Click the **⏹️ Stop** button when done
 5. Your credits will be added to your balance automatically
 
 ### Spending Credits
 
 1. Choose an activity (TV/Tablet or Game)
-2. Click the **Start** button
+2. Click the **▶️ Start** button
 3. Enjoy your earned screen time!
-4. Click the **Stop** button when done
+4. Click the **⏹️ Stop** button when done
 5. Your credits will be deducted from your balance
 
 ### Important Notes
 
 - You need to have credits in your balance before you can spend them
-- All data is saved automatically in your browser
-- If you close the browser and come back, your balance and history will still be there
-- Click "Clear History" to remove all past activities (balance remains unchanged)
+- All data is saved automatically to `credit_data.json`
+- Active timers update every second automatically
+- Click "🗑️ Clear History" to remove all past activities (balance remains unchanged)
+
+## Running Locally
+
+### Requirements
+
+- Python 3.7 or higher
+
+### Installation
+
+1. Clone this repository or download the files
+2. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Run the App
+
+```bash
+streamlit run app.py
+```
+
+The app will open in your browser at `http://localhost:8501`
+
+## Deploy to Streamlit Cloud (FREE)
+
+Deploy this app for free so kids can access it from anywhere on the internet!
+
+### Step-by-Step Deployment
+
+1. **Push your code to GitHub**
+   - Make sure your repository is public or you have Streamlit Cloud access to private repos
+
+2. **Go to Streamlit Cloud**
+   - Visit [share.streamlit.io](https://share.streamlit.io)
+   - Sign in with your GitHub account
+
+3. **Deploy the App**
+   - Click "New app"
+   - Select your repository: `peter-kim-3d/kids-credit-app`
+   - Branch: `claude/kids-credit-system-011CUeQ6e6aoCoCJQBKKfUsg` (or your main branch)
+   - Main file path: `app.py`
+   - Click "Deploy"!
+
+4. **Share the URL**
+   - Once deployed, you'll get a URL like: `https://your-app-name.streamlit.app`
+   - Kids can access it from any device with internet!
+
+### Deployment Notes
+
+- Streamlit Cloud is **completely free** for public apps
+- The app will auto-save data to `credit_data.json`
+- Data persists between sessions
+- The app auto-refreshes when timers are running
 
 ## Technical Details
 
 ### Files
 
-- `index.html` - Main app structure
-- `style.css` - Styling and design
-- `app.js` - Timer logic and credit management
+- `app.py` - Main Streamlit application
+- `requirements.txt` - Python dependencies
+- `credit_data.json` - Auto-generated data storage (not in git)
+- `.gitignore` - Excludes data file from version control
 
 ### Technologies Used
 
-- HTML5
-- CSS3
-- Vanilla JavaScript
-- LocalStorage for data persistence
+- Python 3.7+
+- Streamlit - Web app framework
+- JSON - Data persistence
 
-### Browser Compatibility
+### Data Storage
 
-Works in all modern browsers:
-- Chrome
-- Firefox
-- Safari
-- Edge
+- All data stored in `credit_data.json` locally
+- Includes: balance, history, and active timers
+- Auto-saves after every action
 
 ## Tips for Parents
 
 1. **Set Goals**: Help your kids understand how much time they need to earn for their desired activities
-2. **Fair Exchange**: Consider a 1:1 ratio (1 minute earned = 1 minute spent) or adjust based on your preferences
+2. **Fair Exchange**: The app uses a 1:1 ratio (1 second earned = 1 second spent)
 3. **Regular Review**: Check the activity history together to discuss time management
-4. **Reset Option**: You can clear the browser's local storage to start fresh if needed
+4. **Multi-Device**: Once deployed to Streamlit Cloud, accessible from any device
 
 ## Customization
 
-To modify activities or add new ones, edit the `ACTIVITIES` object in `app.js`:
+To add new activities, edit the `ACTIVITIES` dictionary in `app.py`:
 
-```javascript
-const ACTIVITIES = {
-    study: { type: 'earn', label: 'Study', emoji: '📚' },
-    // Add your custom activities here
-};
+```python
+ACTIVITIES = {
+    'study': {'type': 'earn', 'label': 'Study', 'emoji': '📚'},
+    'homework': {'type': 'earn', 'label': 'Homework', 'emoji': '✏️'},  # Add new activity
+    # Add more activities here
+}
 ```
 
 ## Privacy
 
-All data is stored locally in your browser. No information is sent to any server.
+- Data is stored locally in `credit_data.json`
+- When deployed, each deployment has its own data storage
+- No personal information is collected or transmitted
+
+## Troubleshooting
+
+**Timers not updating?**
+- The app auto-refreshes every second when a timer is active
+- If it seems stuck, refresh the page
+
+**Lost data?**
+- Check if `credit_data.json` exists
+- Data is saved after every Start/Stop action
+
+**Can't start spending timer?**
+- Make sure you have credits in your balance
+- Earn credits first by doing productive activities
 
 ## License
 

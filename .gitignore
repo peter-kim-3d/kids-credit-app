@@ -1,0 +1,4 @@
+credit_data.json
+__pycache__/
+*.pyc
+.streamlit/
